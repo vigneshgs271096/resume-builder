@@ -1,4 +1,6 @@
 .resume-form-container {
-  display: inline;
-  max-width: 600px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px; /* Equal gap between fields */
+  margin: auto; /* Centers the form */
 }

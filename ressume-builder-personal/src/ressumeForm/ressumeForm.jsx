@@ -45,6 +45,7 @@ const ResumeForm = () => {
         value={formData.fullName}
         onChange={handleChange}
         placeholder="FIRST NAME"
+        className="input-field"
         required
       />
 
@@ -55,6 +56,7 @@ const ResumeForm = () => {
         value={formData.email}
         onChange={handleChange}
         placeholder="LAST NAME"
+        className="input-field"
         required
       />
 
@@ -65,6 +67,7 @@ const ResumeForm = () => {
         value={formData.phone}
         onChange={handleChange}
         placeholder="PHONE"
+        className="input-field"
         required
       />
 
@@ -74,6 +77,7 @@ const ResumeForm = () => {
         value={formData.summary}
         onChange={handleChange}
         placeholder="SUMMARY"
+        className="input-field"
       />
 
       {/* Gender (Radio Buttons) */}
