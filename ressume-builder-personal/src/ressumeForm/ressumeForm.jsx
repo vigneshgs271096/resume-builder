@@ -1,27 +1,30 @@
 import React, { useState } from "react";
 import "./ressumeForm.css";
 
-const ResumeForm = () => {
+const ResumeForm = ({ onFormSubmit }) => {
   // State to store form data
   const [formData, setFormData] = useState({
-    fullName: "",
+    name: "",
     email: "",
     phone: "",
-    summary: "",
-    gender: "",
-    skills: [],
+    linkedinURL: "",
+    gitHubURL: "",
+    portfolioURL: "",
+    customFields: {}, // State to store custom fields
   });
 
   // Handling input changes
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
 
-    if (type === "checkbox") {
+    if (name.startsWith("custom_")) {
+      const key = name.split("custom_")[1];
       setFormData((prev) => ({
         ...prev,
-        skills: checked
-          ? [...prev.skills, value] // Add skill if checked
-          : prev.skills.filter((skill) => skill !== value), // Remove if unchecked
+        customFields: {
+          ...prev.customFields,
+          [key]: value,
+        },
       }));
     } else {
       setFormData({ ...formData, [name]: value });
@@ -31,114 +34,115 @@ const ResumeForm = () => {
   // Handling form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+    onFormSubmit(formData);
     console.log("Form Submitted:", formData);
   };
 
+  // Adding a new custom field
+  const addCustomField = () => {
+    const key = prompt("Enter the key for the custom field:");
+    if (key) {
+      setFormData((prev) => ({
+        ...prev,
+        customFields: {
+          ...prev.customFields,
+          [key]: "",
+        },
+      }));
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="resume-form-container">
-      <h2>Resume Form</h2>
-
-      {/* Full Name */}
-      <input
-        type="text"
-        name="fullName"
-        value={formData.fullName}
-        onChange={handleChange}
-        placeholder="FIRST NAME"
-        className="input-field"
-        required
-      />
-
-      {/* Email */}
-      <input
-        type="email"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        placeholder="LAST NAME"
-        className="input-field"
-        required
-      />
-
-      {/* Phone */}
-      <input
-        type="tel"
-        name="phone"
-        value={formData.phone}
-        onChange={handleChange}
-        placeholder="PHONE"
-        className="input-field"
-        required
-      />
-
-      {/* Summary */}
-      <textarea
-        name="summary"
-        value={formData.summary}
-        onChange={handleChange}
-        placeholder="SUMMARY"
-        className="input-field"
-      />
-
-      {/* Gender (Radio Buttons) */}
-      <label>Gender:</label>
-      <label>
+    <>
+      <h2>Personal details</h2>
+      <form onSubmit={handleSubmit} className="resume-form-container">
+        {/* Full Name */}
         <input
-          type="radio"
-          name="gender"
-          value="Male"
-          checked={formData.gender === "Male"}
+          type="text"
+          name="name"
+          value={formData.fullName}
           onChange={handleChange}
-        />{" "}
-        Male
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="gender"
-          value="Female"
-          checked={formData.gender === "Female"}
-          onChange={handleChange}
-        />{" "}
-        Female
-      </label>
+          placeholder="NAME"
+          className="input-field"
+          required
+        />
 
-      {/* Skills (Checkboxes) */}
-      <label>Skills:</label>
-      <label>
+        {/* Email */}
         <input
-          type="checkbox"
-          name="skills"
-          value="JavaScript"
+          type="email"
+          name="email"
+          value={formData.email}
           onChange={handleChange}
-          checked={formData.skills.includes("JavaScript")}
-        />{" "}
-        JavaScript
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          name="skills"
-          value="React"
-          onChange={handleChange}
-          checked={formData.skills.includes("React")}
-        />{" "}
-        React
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          name="skills"
-          value="Node.js"
-          onChange={handleChange}
-          checked={formData.skills.includes("Node.js")}
-        />{" "}
-        Node.js
-      </label>
+          placeholder="EMAIL"
+          className="input-field"
+          required
+        />
 
-      {/* Submit Button */}
-      <button type="submit">Submit</button>
-    </form>
+        {/* Phone */}
+        <input
+          type="tel"
+          name="phone"
+          value={formData.phone}
+          onChange={handleChange}
+          placeholder="PHONE"
+          className="input-field"
+          required
+        />
+
+        {/* Phone */}
+        <input
+          type="url"
+          name="linkedinURL"
+          value={formData.linkedinURL}
+          onChange={handleChange}
+          placeholder="LinkedIn"
+          className="input-field"
+          required
+        />
+
+        {/* github */}
+        <input
+          type="url"
+          name="gitHubURL"
+          value={formData.gitHubURL}
+          onChange={handleChange}
+          placeholder="Github"
+          className="input-field"
+        />
+
+        {/* github */}
+        <input
+          type="url"
+          name="portfolioURL"
+          value={formData.portfolioURL}
+          onChange={handleChange}
+          placeholder="Portfolio"
+          className="input-field"
+        />
+
+        {/* Custom Fields */}
+        {Object.keys(formData.customFields).map((key) => (
+          <input
+            key={key}
+            type="url"
+            name={`custom_${key}`}
+            value={formData.customFields[key]}
+            onChange={handleChange}
+            placeholder={key}
+            className="input-field"
+          />
+        ))}
+        <div>
+          <button type="button" onClick={addCustomField}>
+            Add Custom Field
+          </button>
+
+          {/* Submit Button */}
+          <button type="submit">Submit</button>
+        </div>
+        {/* Add Custom Field Button */}
+      </form>
+    </>
   );
 };
 
